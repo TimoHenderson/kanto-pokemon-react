@@ -1,0 +1,14 @@
+.filterButton {
+    background-color: rgb(216, 2, 2);
+    color: rgb(255, 255, 255);
+    border-color: rgb(190, 190, 190);
+    border-radius: 0.5rem;
+    width: 5rem;
+}
+
+.filterButton.off {
+    background-color: white;
+    color: red;
+    border-color: red;
+
+}
