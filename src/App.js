@@ -1,4 +1,5 @@
 import './App.css';
+import PokemonContainer from './containers/PokemonContainer';
 
 function App() {
   return (
@@ -6,6 +7,7 @@ function App() {
       <header className="App-header">
         <h1>Pokemon!</h1>
       </header>
+      <PokemonContainer />
     </div>
   );
 }
