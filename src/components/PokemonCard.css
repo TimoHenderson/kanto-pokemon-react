@@ -2,3 +2,7 @@
     background: bisque;
     width: 10rem;
 }
+
+.pokemonCard>img.notCaught {
+    opacity: 40%;
+}
