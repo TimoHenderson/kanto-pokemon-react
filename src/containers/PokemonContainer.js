@@ -3,20 +3,34 @@ import FilterButtonsBox from '../components/FilterButtonsBox';
 import PokeBall from '../components/Pokeball';
 import PokemonList from '../components/PokemonList';
 import PokemonGame from '../components/PokemonGame';
+import CaughtPokemon from '../components/CaughtPokemon';
 
 function PokemonContainer() {
     const [pokemonList, setPokemonList] = useState([]);
-    const [pokemonOut, setPokemonOut] = useState([25, 10]);
+    const [pokemonOut, setPokemonOut] = useState([]);
     const [pokemonCaught, setPokemonCaught] = useState([1, 3, 12]);
     const [caughtFilters, setCaughtFilters] = useState({ uncaught: true, caught: true });
     const [typeFilters, setTypeFilters] = useState({});
+    const [maxPokemonOut, setMaxPokemonOut] = useState(0);
 
     useEffect(() => {
         getPokemon();
+        setMaxPokemonOut(1);
     }, []);
 
+    useEffect(() => {
+        async function staggerPokemon() {
+            if (pokemonOut.length <= maxPokemonOut && pokemonOut.length < 15) {
+                await delay(Math.random() * (7000 - 3000) + 3000);
+                setMaxPokemonOut(pokemonOut.length + 1);
+            }
+        }
+        staggerPokemon();
+    }, [pokemonOut, maxPokemonOut])
 
-
+    function delay(time) {
+        return new Promise(resolve => setTimeout(resolve, time));
+    }
 
     async function getPokemon() {
         const response = await fetch("https://pokeapi.co/api/v2/generation/1");
@@ -55,7 +69,8 @@ function PokemonContainer() {
 
     return (
         <div><PokeBall />
-            {pokemonList && <PokemonGame pokemonList={pokemonList} pokemonOut={pokemonOut} setPokemonOut={setPokemonOut} pokemonCaught={pokemonCaught} catchPokemon={catchPokemon} />}
+            {pokemonList && <PokemonGame pokemonList={pokemonList} pokemonOut={pokemonOut} setPokemonOut={setPokemonOut} pokemonCaught={pokemonCaught} catchPokemon={catchPokemon} maxPokemonOut={maxPokemonOut} />}
+            <CaughtPokemon pokemonList={pokemonList} pokemonCaught={pokemonCaught} />
             <FilterButtonsBox typeFilters={typeFilters} setTypeFilters={setTypeFilters} caughtFilters={caughtFilters} setCaughtFilters={setCaughtFilters} />
             <PokemonList typeFilters={typeFilters} caughtFilters={caughtFilters} pokemonList={pokemonList} pokemonCaught={pokemonCaught} catchPokemon={catchPokemon} />
 
