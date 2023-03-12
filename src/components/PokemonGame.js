@@ -23,11 +23,9 @@ function PokemonGame({ pokemonList, setPokemonOut, pokemonOut, catchPokemon, pok
 
 
     return <div>
-
         <PokemonStage catchPokemon={catchPokemon} pokemonList={pokemonList} pokemonOut={pokemonOut} />
         <PokeBall />
         <CaughtPokemon pokemonList={pokemonList} pokemonCaught={pokemonCaught} />
-
     </div>
 }
 

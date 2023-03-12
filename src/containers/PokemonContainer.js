@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import PokemonGame from '../components/PokemonGame';
 import Pokedex from '../components/Pokedex';
 import CardModal from '../components/CardModal';
@@ -70,10 +70,15 @@ function PokemonContainer() {
         }
         setShowCaughtCard(pokemon);
     }
-
+    const transition = {
+        opacity: {
+            duration: 10
+        }
+    }
 
     return (
         <div>
+            <motion.h1 initial={{ opacity: 0 }} animate={{ opacity: [1, 1, 0], transitionEnd: { display: "none" } }} transition={transition} className='instructions'>Catch'em All!(Grab the Poke-Ball)</motion.h1>
             <button style={{ position: "fixed", top: "5px", right: "20px", zIndex: "10" }} onClick={() => setViewPokedex(!viewPokedex)}>{viewPokedex ? "Game" : "Pokedex"}</button>
             {pokemonList && <PokemonGame pokemonList={pokemonList} pokemonOut={pokemonOut} setPokemonOut={setPokemonOut} pokemonCaught={pokemonCaught} catchPokemon={catchPokemon} maxPokemonOut={maxPokemonOut} />}
             {viewPokedex && pokemonList && <Pokedex typeFilters={typeFilters} setTypeFilters={setTypeFilters} caughtFilters={caughtFilters} setCaughtFilters={setCaughtFilters} pokemonList={pokemonList} pokemonCaught={pokemonCaught} />}

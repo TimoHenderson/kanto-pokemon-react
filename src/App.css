@@ -3,3 +3,10 @@
   background-color: green;
   height: 100dvh;
 }
+
+.instructions {
+  color: yellow;
+  position: fixed;
+  width: 100%;
+  z-index: 15;
+}
