@@ -1,5 +1,4 @@
 import React from "react";
-import FilterButton from "./FilterButton";
 import FilterButtons from "./FilterButtons";
 
 function FilterButtonsBox({ typeFilters, caughtFilters, setCaughtFilters, setTypeFilters }) {
@@ -31,10 +30,11 @@ function FilterButtonsBox({ typeFilters, caughtFilters, setCaughtFilters, setTyp
         filterFunc(newFilters)
     }
     return (
-        <div className="filterButtonBox">
+        <div className="filterButtonsBox">
+            <h1>Pokedex</h1>
             <FilterButtons filters={typeFilters} toggleFilter={toggleTypeFilter} />
             <FilterButtons filters={caughtFilters} toggleFilter={toggleCaughtFilter} />
-            <div>
+            <div className="filterButtons">
                 <button onClick={() => setAllTypeFilters(false)}>No Types</button>
                 <button onClick={() => setAllTypeFilters(true)} >All Types</button>
                 <button onClick={() => setAllCaughtFilters(true)}>Caught and Uncaught</button>

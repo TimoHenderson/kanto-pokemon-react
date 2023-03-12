@@ -1,4 +1,4 @@
-import React, { useEffect, } from "react";
+import React, { useEffect } from "react";
 import { Droppable } from 'react-drag-and-drop'
 import PokemonSprite from "./PokemonSprite";
 import { motion } from "framer-motion"
@@ -7,7 +7,11 @@ import { getRandomInt, getRandomArbitrary } from "../helpers/getRandomNumber"
 
 
 function MovingPokemonSprite({ pokemon, catchPokemon, stage }) {
+    useEffect(() => {
+        if (stage.current) {
 
+        }
+    }, [stage])
 
     const moveTypes = ["linear",
         "easeIn", "easeOut", "easeInOut",
@@ -19,14 +23,15 @@ function MovingPokemonSprite({ pokemon, catchPokemon, stage }) {
         y: {
             duration: 8,
             repeat: Infinity,
-            repeatType: "mirror",
+            repeatType: "reverse",
             ease: "backOut"
         },
         x: {
             duration: 10,
             repeat: Infinity,
-            repeatType: "mirror",
-            ease: "backOut"
+            repeatType: "reverse",
+            ease: "backOut",
+
 
         },
         opacity: {
@@ -36,7 +41,10 @@ function MovingPokemonSprite({ pokemon, catchPokemon, stage }) {
             duration: 0.8,
             repeat: Infinity
         },
-        scale: { duration: 0.8 }
+        scale: {
+            duration: 0.8
+        },
+
 
 
 
@@ -61,6 +69,7 @@ function MovingPokemonSprite({ pokemon, catchPokemon, stage }) {
             opacity: 1,
             x: ["20px", stageWidth],
             y: ["20px", stageHeight]
+
         }
         return (
             <motion.div

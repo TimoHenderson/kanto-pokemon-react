@@ -2,7 +2,7 @@ import React from "react";
 import PokemonCard from "./PokemonCard";
 import './PokemonList.css'
 
-function PokemonList({ pokemonList, pokemonCaught, catchPokemon, typeFilters, caughtFilters }) {
+function PokemonList({ pokemonList, pokemonCaught, typeFilters, caughtFilters }) {
     const filteredPokemonList = pokemonList.filter((pokemon) => {
         let typeValid = false;
         let caughtValid = false;
@@ -16,11 +16,11 @@ function PokemonList({ pokemonList, pokemonCaught, catchPokemon, typeFilters, ca
         return typeValid && caughtValid
     })
     const pokemonNodes = filteredPokemonList.map((pokemon) => {
-        return <PokemonCard key={pokemon.id} caught={pokemonCaught.includes(pokemon.id)} pokemon={pokemon} catchPokemon={catchPokemon} />
+        return <PokemonCard key={pokemon.id} caught={pokemonCaught.includes(pokemon.id)} pokemon={pokemon} />
     })
     return (
         <div className="pokemonListContainer">
-            <h3>Pokemon List</h3>
+
             <main>{pokemonNodes}</main>
         </div>
     );

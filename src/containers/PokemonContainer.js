@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import FilterButtonsBox from '../components/FilterButtonsBox';
-import PokeBall from '../components/Pokeball';
-import PokemonList from '../components/PokemonList';
+import { AnimatePresence } from "framer-motion"
 import PokemonGame from '../components/PokemonGame';
-import CaughtPokemon from '../components/CaughtPokemon';
+import Pokedex from '../components/Pokedex';
+import CardModal from '../components/CardModal';
 
 function PokemonContainer() {
     const [pokemonList, setPokemonList] = useState([]);
@@ -12,6 +11,8 @@ function PokemonContainer() {
     const [caughtFilters, setCaughtFilters] = useState({ uncaught: true, caught: true });
     const [typeFilters, setTypeFilters] = useState({});
     const [maxPokemonOut, setMaxPokemonOut] = useState(0);
+    const [viewPokedex, setViewPokedex] = useState(false);
+    const [showCaughtCard, setShowCaughtCard] = useState(null);
 
     useEffect(() => {
         getPokemon();
@@ -47,6 +48,9 @@ function PokemonContainer() {
         for (let i = 0; i < pokemonSpecies.length; i++) {
             const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonSpecies[i].name}`);
             const pokemon = await response.json();
+            const response2 = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemonSpecies[i].name}`);
+            const pokemon2 = await response2.json();
+            pokemon["flavor_text"] = pokemon2.flavor_text_entries[2].flavor_text;
             pokemonList.push(pokemon)
         }
         pokemonList.sort((a, b) => a.id - b.id)
@@ -64,17 +68,20 @@ function PokemonContainer() {
             newOutList.splice(newOutList.indexOf(pokemon.id), 1)
             setPokemonOut(newOutList);
         }
+        setShowCaughtCard(pokemon);
     }
 
 
     return (
-        <div><PokeBall />
+        <div>
+            <button style={{ position: "fixed", top: "5px", right: "20px", zIndex: "10" }} onClick={() => setViewPokedex(!viewPokedex)}>{viewPokedex ? "Game" : "Pokedex"}</button>
             {pokemonList && <PokemonGame pokemonList={pokemonList} pokemonOut={pokemonOut} setPokemonOut={setPokemonOut} pokemonCaught={pokemonCaught} catchPokemon={catchPokemon} maxPokemonOut={maxPokemonOut} />}
-            <CaughtPokemon pokemonList={pokemonList} pokemonCaught={pokemonCaught} />
-            <FilterButtonsBox typeFilters={typeFilters} setTypeFilters={setTypeFilters} caughtFilters={caughtFilters} setCaughtFilters={setCaughtFilters} />
-            <PokemonList typeFilters={typeFilters} caughtFilters={caughtFilters} pokemonList={pokemonList} pokemonCaught={pokemonCaught} catchPokemon={catchPokemon} />
+            {viewPokedex && pokemonList && <Pokedex typeFilters={typeFilters} setTypeFilters={setTypeFilters} caughtFilters={caughtFilters} setCaughtFilters={setCaughtFilters} pokemonList={pokemonList} pokemonCaught={pokemonCaught} />}
+            {showCaughtCard && <AnimatePresence>
+                <CardModal pokemon={showCaughtCard} caught={true} setShowCaughtCard={setShowCaughtCard} />
+            </AnimatePresence>}
+        </div >
 
-        </div>
     )
 }
 export default PokemonContainer;

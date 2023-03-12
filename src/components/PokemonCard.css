@@ -1,8 +1,23 @@
 .pokemonCard {
     background: bisque;
-    width: 10rem;
+    width: 14rem;
+    border-radius: 1rem;
+    padding: 1rem;
 }
 
 .pokemonCard>img.notCaught {
     opacity: 40%;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100dvw;
+    height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.533);
+    z-index: 12;
 }

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import PokemonStage from "./PokemonStage";
-
+import PokeBall from "./Pokeball";
+import CaughtPokemon from "./CaughtPokemon";
 function PokemonGame({ pokemonList, setPokemonOut, pokemonOut, catchPokemon, pokemonCaught, maxPokemonOut }) {
 
     useEffect(() => {
@@ -20,11 +21,14 @@ function PokemonGame({ pokemonList, setPokemonOut, pokemonOut, catchPokemon, pok
         }
     }, [pokemonOut, pokemonList, pokemonCaught, maxPokemonOut, setPokemonOut])
 
-    if (pokemonOut.length > 0) {
-        return <PokemonStage catchPokemon={catchPokemon} pokemonList={pokemonList} pokemonOut={pokemonOut} />
-    } else {
-        return <h1>Loading</h1>
-    }
+
+    return <div>
+
+        <PokemonStage catchPokemon={catchPokemon} pokemonList={pokemonList} pokemonOut={pokemonOut} />
+        <PokeBall />
+        <CaughtPokemon pokemonList={pokemonList} pokemonCaught={pokemonCaught} />
+
+    </div>
 }
 
 export default PokemonGame;

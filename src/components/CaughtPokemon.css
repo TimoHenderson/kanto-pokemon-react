@@ -1,7 +1,9 @@
 .caughtPokemon {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 0.8rem;
     justify-content: center;
     align-items: center;
+    background-color: green;
+    height: 100%;
 }

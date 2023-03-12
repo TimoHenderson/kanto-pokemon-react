@@ -1,5 +1,7 @@
 .pokemonListContainer {
     background-color: rgb(138, 62, 62);
+    padding-top: 2rem;
+    min-height: 100dvh;
 
 }
 
@@ -8,4 +10,12 @@
     flex-wrap: wrap;
     gap: 1rem;
     justify-content: center;
+
+}
+
+.pokedex {
+    position: absolute;
+    top: 0;
+    width: 100%;
+
 }
