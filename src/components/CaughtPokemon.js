@@ -8,7 +8,7 @@ function CaughtPokemon({ pokemonList, pokemonCaught }) {
     });
     return (
         <div className="caughtPokemon">
-            {pokeNodes};
+            {pokeNodes}
         </div>
     )
 }
