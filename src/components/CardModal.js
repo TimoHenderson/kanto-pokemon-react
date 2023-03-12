@@ -6,7 +6,7 @@ function CardModal({ pokemon, caught, setShowCaughtCard }) {
             duration: 2
         },
         opacity: {
-            duration: 1.5
+            duration: 0.8
         }
     }
 

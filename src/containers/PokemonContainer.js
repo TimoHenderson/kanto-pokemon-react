@@ -7,8 +7,8 @@ import CardModal from '../components/CardModal';
 function PokemonContainer() {
     const [pokemonList, setPokemonList] = useState([]);
     const [pokemonOut, setPokemonOut] = useState([]);
-    const [pokemonCaught, setPokemonCaught] = useState([1, 3, 12]);
-    const [caughtFilters, setCaughtFilters] = useState({ uncaught: true, caught: true });
+    const [pokemonCaught, setPokemonCaught] = useState([]);
+    const [caughtFilters, setCaughtFilters] = useState({ uncaught: false, caught: true });
     const [typeFilters, setTypeFilters] = useState({});
     const [maxPokemonOut, setMaxPokemonOut] = useState(0);
     const [viewPokedex, setViewPokedex] = useState(false);
@@ -38,7 +38,6 @@ function PokemonContainer() {
         const genData = await response.json();
 
         const types = genData.types.map(type => type.name);
-        console.log("types", types);
         const typeFilters = {};
         types.forEach(type => typeFilters[type] = true);
         setTypeFilters(typeFilters);
@@ -54,7 +53,6 @@ function PokemonContainer() {
             pokemonList.push(pokemon)
         }
         pokemonList.sort((a, b) => a.id - b.id)
-        console.log("fetching", pokemonList);
         setPokemonList(pokemonList)
     }
 

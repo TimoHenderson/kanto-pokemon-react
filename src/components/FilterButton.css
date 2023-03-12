@@ -7,8 +7,8 @@
 }
 
 .filterButton.off {
-    background-color: white;
-    color: red;
+    background-color: rgb(199, 199, 199);
+    color: rgb(45, 45, 45);
     border-color: red;
-
+    border-style: inset;
 }
