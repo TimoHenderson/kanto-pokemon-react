@@ -62,13 +62,18 @@ function MovingPokemonSprite({ pokemon, catchPokemon, stage }) {
 
     if (stage.current !== null) {
 
-        let stageWidth = `${stage.current.offsetWidth - 70}px`
-        let stageHeight = `${stage.current.offsetHeight - 70}px`
+        let stageWidth = stage.current.offsetWidth
+        let stageHeight = stage.current.offsetHeight
+        let stageWidthPx = `${stageWidth - 70}px`
+        let stageHeightPx = `${stageHeight - 70}px`
+        let stageWidthHalfPx = `${stageWidth / 2 - 70}px`
+        let stageHeightHalfPx = `${stageHeight / 2 - 70}px`
+
 
         const animate = {
             opacity: 1,
-            x: ["20px", stageWidth],
-            y: ["20px", stageHeight]
+            x: ["20px", stageWidthHalfPx, stageWidthPx],
+            y: ["20px", stageHeightHalfPx, stageHeightPx]
 
         }
         return (
