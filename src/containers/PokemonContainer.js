@@ -34,27 +34,37 @@ function PokemonContainer() {
     }
 
     async function getPokemon() {
-        const response = await fetch("https://pokeapi.co/api/v2/generation/1");
-        const genData = await response.json();
 
-        const types = genData.types.map(type => type.name);
-        const typeFilters = {};
-        types.forEach(type => typeFilters[type] = true);
-        setTypeFilters(typeFilters);
-
-        const pokemonSpecies = genData.pokemon_species;
-        let pokemonList = []
-        for (let i = 0; i < pokemonSpecies.length; i++) {
-            const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonSpecies[i].name}`);
-            const pokemon = await response.json();
-            const response2 = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemonSpecies[i].name}`);
-            const pokemon2 = await response2.json();
-            pokemon["flavor_text"] = pokemon2.flavor_text_entries[2].flavor_text;
-            pokemonList.push(pokemon)
+        async function getGenData() {
+            const response = await fetch("https://pokeapi.co/api/v2/generation/1");
+            const genData = await response.json();
+            const types = genData.types.map(type => type.name);
+            const typeFilters = {};
+            types.forEach(type => typeFilters[type] = true);
+            setTypeFilters(typeFilters);
+            return genData;
         }
-        pokemonList.sort((a, b) => a.id - b.id)
-        setPokemonList(pokemonList)
+
+        async function getPokemonData() {
+            const pokemonPromises = genData.pokemon_species.map(async (pokemon) => {
+                const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon.name}`);
+                const pokeData = await res.json();
+                const res2 = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemon.name}`);
+                // pokeData["flavor_text"] = await res2.json().flavor_text_entries[1].flavor_text;
+                const pokeSpeciesData = await res2.json();
+                pokeData["flavor_text"] = pokeSpeciesData.flavor_text_entries[2].flavor_text
+                return pokeData;
+            })
+            const pokemonList = await Promise.all(pokemonPromises);
+            return pokemonList;
+        }
+
+        const genData = await getGenData();
+        const pokemonList = await getPokemonData();
+        setPokemonList(pokemonList);
     }
+
+
 
     function catchPokemon(pokemon) {
         if (!pokemonCaught.includes(pokemon.id)) {
