@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useMemo, useEffect } from "react";
 import { Droppable } from 'react-drag-and-drop'
 import PokemonSprite from "./PokemonSprite";
 import { motion } from "framer-motion"
@@ -7,81 +7,108 @@ import { getRandomInt, getRandomArbitrary } from "../helpers/getRandomNumber"
 
 
 function MovingPokemonSprite({ pokemon, catchPokemon, stage }) {
-    useEffect(() => {
-        if (stage.current) {
 
+
+    const pokeMove = useMemo(() => {
+
+
+        let stageWidth = stage.width;
+        let stageHeight = stage.height;
+
+        const moveTypes = ["linear",
+            "easeIn", "easeOut", "easeInOut",
+            "circIn", "circOut", "circInOut",
+            "backIn", "backOut", "backInOut",
+            "anticipate"]
+
+        function randomizeModifiers() {
+            modifiers.initial.x = getRandomArbitrary(0, 1);
+            modifiers.initial.y = getRandomArbitrary(0, 1);
+            const numKeyFramesX = getRandomInt(3, 8)
+            for (let i = 0; i < numKeyFramesX; i++) {
+                modifiers.keyFrames.x.push(getRandomArbitrary(0, 1));
+            }
+            const numKeyFramesY = getRandomInt(3, 5)
+            for (let i = 0; i < numKeyFramesY; i++) {
+                modifiers.keyFrames.y.push(getRandomArbitrary(0, 1));
+            }
+        }
+
+        const modifiers = {
+            initial: {
+                x: 0, y: 0
+            },
+            keyFrames: {
+                x: [],
+                y: []
+            }
+        }
+
+        randomizeModifiers();
+        const animate = {
+            opacity: 1
+        }
+        animate['x'] = modifiers.keyFrames.x.map((modifier) => {
+            return `${Math.floor((stageWidth - 40) * modifier)}px`
+        })
+        animate['y'] = modifiers.keyFrames.y.map((modifier) => {
+            return `${Math.floor((stageHeight - 40) * modifier)}px`
+        })
+
+        const transition = {
+            y: {
+                duration: 8,
+                repeat: Infinity,
+                repeatType: "reverse",
+                ease: "backOut"
+            },
+            x: {
+                duration: 11,
+                repeat: Infinity,
+                repeatType: "reverse",
+                ease: "backOut",
+            },
+            opacity: {
+                duration: 0.8
+            },
+            rotate: {
+                duration: 0.8,
+                repeat: Infinity
+            },
+            scale: {
+                duration: 0.8
+            }
+        };
+
+        function randomizeMovement() {
+            const minY = animate.y.length / 3 * 5;
+            const maxY = animate.y.length / 3 * 11;
+            transition.y.duration = getRandomArbitrary(minY, maxY);
+            const minX = animate.x.length / 3 * 5;
+            const maxX = animate.x.length / 3 * 11;
+            transition.x.duration = getRandomArbitrary(minX, maxX);
+            const easeType = moveTypes[getRandomInt(0, moveTypes.length)];
+            transition.y.ease = easeType;
+            transition.x.ease = easeType;
+        }
+        randomizeMovement();
+        const initial = {
+            opacity: 0,
+        }
+        return {
+            initial: initial,
+            animate: animate,
+            transition: transition
         }
     }, [stage])
 
-    const moveTypes = ["linear",
-        "easeIn", "easeOut", "easeInOut",
-        "circIn", "circOut", "circInOut",
-        "backIn", "backOut", "backInOut",
-        "anticipate"]
-
-    const movePokemon = {
-        y: {
-            duration: 8,
-            repeat: Infinity,
-            repeatType: "reverse",
-            ease: "backOut"
-        },
-        x: {
-            duration: 10,
-            repeat: Infinity,
-            repeatType: "reverse",
-            ease: "backOut",
-
-
-        },
-        opacity: {
-            duration: 0.8
-        },
-        rotate: {
-            duration: 0.8,
-            repeat: Infinity
-        },
-        scale: {
-            duration: 0.8
-        },
-
-
-
-
-    };
-
-    function randomizeMovement() {
-        movePokemon.y.duration = getRandomArbitrary(5, 11);
-        movePokemon.x.duration = getRandomArbitrary(5, 11);
-        const easeType = moveTypes[getRandomInt(0, moveTypes.length)];
-        movePokemon.y.ease = easeType;
-        movePokemon.x.ease = easeType;
-    }
-
-    randomizeMovement();
-
     if (stage.current !== null) {
-
-        let stageWidth = stage.current.offsetWidth
-        let stageHeight = stage.current.offsetHeight
-        let stageWidthPx = `${stageWidth - 70}px`
-        let stageHeightPx = `${stageHeight - 70}px`
-        let stageWidthHalfPx = `${stageWidth / 2 - 70}px`
-        let stageHeightHalfPx = `${stageHeight / 2 - 70}px`
-
-
-        const animate = {
-            opacity: 1,
-            x: ["20px", stageWidthHalfPx, stageWidthPx],
-            y: ["20px", stageHeightHalfPx, stageHeightPx]
-
-        }
         return (
             <motion.div
                 style={{ position: "absolute" }}
-                transition={movePokemon}
-                initial={{ opacity: 0 }}
-                animate={animate}
+                transition={pokeMove.transition}
+                initial={pokeMove.initial}
+                animate={pokeMove.animate}
                 exit={{
                     opacity: 0,
                     rotate: 720,
