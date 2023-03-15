@@ -1,17 +1,26 @@
-import React, { useMemo, useEffect } from "react";
+import React, { useMemo, useEffect, useRef } from "react";
 import { Droppable } from 'react-drag-and-drop'
 import PokemonSprite from "./PokemonSprite";
 import { motion } from "framer-motion"
 import "./PokemonSprite.css"
 import { getRandomInt, getRandomArbitrary } from "../helpers/getRandomNumber"
 
+const pointInRect = ({ left, top, right, bottom }, { x, y }) => {
 
-function MovingPokemonSprite({ pokemon, catchPokemon, stage }) {
+    return (x > left && x < right) && (y > top && y < bottom)
+}
 
+function MovingPokemonSprite({ pokemon, catchPokemon, stage, pokeballPos }) {
+    const sprite = useRef(null);
+    useEffect(() => {
+
+        if (pointInRect(sprite.current.getBoundingClientRect(), pokeballPos)) {
+            console.log("Hit!")
+        }
+
+    }, [pokeballPos]);
 
     const pokeMove = useMemo(() => {
-
-
         let stageWidth = stage.width;
         let stageHeight = stage.height;
 
@@ -104,7 +113,7 @@ function MovingPokemonSprite({ pokemon, catchPokemon, stage }) {
 
     if (stage.current !== null) {
         return (
-            <motion.div
+            <motion.div ref={sprite}
                 style={{ position: "absolute" }}
                 transition={pokeMove.transition}
                 initial={pokeMove.initial}
@@ -114,11 +123,9 @@ function MovingPokemonSprite({ pokemon, catchPokemon, stage }) {
                     rotate: 720,
                     scale: 0
                 }}>
-                <Droppable className="pokemonSprite"
-                    types={["pokeball"]}
-                    onDrop={() => catchPokemon(pokemon)}>
-                    <PokemonSprite pokemon={pokemon} />
-                </Droppable>
+
+                <PokemonSprite pokemon={pokemon} />
+
             </motion.div >
         )
     } else {

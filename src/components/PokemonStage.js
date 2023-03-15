@@ -14,7 +14,7 @@ function debounce(fn, ms) {
     };
 }
 
-function PokemonStage({ pokemonList, pokemonOut, catchPokemon }) {
+function PokemonStage({ pokemonList, pokemonOut, catchPokemon, pokeballPos }) {
     const pokemonStage = useRef(null);
     const [dimensions, setDimensions] = useState({});
 
@@ -24,7 +24,9 @@ function PokemonStage({ pokemonList, pokemonOut, catchPokemon }) {
             setDimensions({
                 width: pokemonStage.current.offsetWidth,
                 height: pokemonStage.current.offsetHeight
+
             })
+
         }, 1000)
         window.addEventListener('resize', debouncedHandleResize);
         return _ => {
@@ -52,6 +54,7 @@ function PokemonStage({ pokemonList, pokemonOut, catchPokemon }) {
             pokemon={pokemon}
             catchPokemon={catchPokemon}
             stage={dimensions}
+            pokeballPos={pokeballPos}
         />
     })
 

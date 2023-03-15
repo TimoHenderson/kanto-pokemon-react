@@ -1,12 +1,16 @@
-import { Draggable } from 'react-drag-and-drop'
+import { Draggable } from 'react-drag-and-drop';
+import { motion } from 'framer-motion';
 import './Pokeball.css'
-function PokeBall() {
+function PokeBall({ handleThrow }) {
     return (
-        <div className='pokeballBar'>
-            <Draggable type="pokeball" className="pokeball">
-                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="" />
-            </Draggable>
-        </div>
+
+
+
+        <motion.img drag={true} onDragEnd={
+            (event, info) => handleThrow(info.point)} src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="" />
+
+
+
     )
 }
 export default PokeBall;

@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PokemonStage from "./PokemonStage";
 import PokeBall from "./Pokeball";
 import CaughtPokemon from "./CaughtPokemon";
 function PokemonGame({ pokemonList, setPokemonOut, pokemonOut, catchPokemon, pokemonCaught, maxPokemonOut }) {
-
+    const [pokeballPos, setPokeballPos] = useState({ x: 0, y: 0 })
     useEffect(() => {
         function getRandomPokemon() {
             const filtered = pokemonList.filter((p) => !pokemonCaught.includes(p.id)).map(p => p.id);
@@ -21,10 +21,13 @@ function PokemonGame({ pokemonList, setPokemonOut, pokemonOut, catchPokemon, pok
         }
     }, [pokemonOut, pokemonList, pokemonCaught, maxPokemonOut, setPokemonOut])
 
+    function handleThrow(point) {
+        setPokeballPos({ x: point.x, y: point.y });
+    }
 
     return <div>
-        <PokemonStage catchPokemon={catchPokemon} pokemonList={pokemonList} pokemonOut={pokemonOut} />
-        <PokeBall />
+        <PokemonStage catchPokemon={catchPokemon} pokemonList={pokemonList} pokemonOut={pokemonOut} pokeballPos={pokeballPos} />
+        <PokeBall handleThrow={handleThrow} />
         <CaughtPokemon pokemonList={pokemonList} pokemonCaught={pokemonCaught} />
     </div>
 }
