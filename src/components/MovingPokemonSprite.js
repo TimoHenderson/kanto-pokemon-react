@@ -1,7 +1,7 @@
 import React, { useMemo, useEffect, useRef } from "react";
-import { Droppable } from 'react-drag-and-drop'
+
 import PokemonSprite from "./PokemonSprite";
-import { motion } from "framer-motion"
+import { easeIn, motion } from "framer-motion"
 import "./PokemonSprite.css"
 import { getRandomInt, getRandomArbitrary } from "../helpers/getRandomNumber"
 
@@ -12,10 +12,42 @@ const pointInRect = ({ left, top, right, bottom }, { x, y }) => {
 
 function MovingPokemonSprite({ pokemon, catchPokemon, stage, pokeballPos }) {
     const sprite = useRef(null);
+    const exit = {
+
+        opacity: 0,
+        rotate: 1920,
+        scale: 0,
+        transition: {
+            rotate: {
+                duration: 1.5
+            },
+            opacity: {
+                ease: 'easeIn',
+                duration: 1.5
+            },
+            scale: {
+                duration: 1,
+
+            }
+        }
+    }
     useEffect(() => {
 
-        if (pointInRect(sprite.current.getBoundingClientRect(), pokeballPos)) {
-            console.log("Hit!")
+        function handleCatchPokemon(boundingRect) {
+            const spriteCenter = {
+                x: boundingRect.left + (boundingRect.right - boundingRect.left) / 2,
+                y: boundingRect.top + (boundingRect.bottom - boundingRect.top) / 2
+            }
+            exit.x = boundingRect.left;
+            exit.y = boundingRect.top;
+            catchPokemon(pokemon, spriteCenter);
+        }
+        if (pokeballPos) {
+            const boundingRect = sprite.current.getBoundingClientRect()
+            if (pointInRect(boundingRect, pokeballPos)) {
+                handleCatchPokemon(boundingRect);
+                console.log();
+            }
         }
 
     }, [pokeballPos]);
@@ -104,10 +136,12 @@ function MovingPokemonSprite({ pokemon, catchPokemon, stage, pokeballPos }) {
         const initial = {
             opacity: 0,
         }
+
         return {
             initial: initial,
             animate: animate,
-            transition: transition
+            transition: transition,
+            exit: exit
         }
     }, [stage])
 
@@ -118,11 +152,7 @@ function MovingPokemonSprite({ pokemon, catchPokemon, stage, pokeballPos }) {
                 transition={pokeMove.transition}
                 initial={pokeMove.initial}
                 animate={pokeMove.animate}
-                exit={{
-                    opacity: 0,
-                    rotate: 720,
-                    scale: 0
-                }}>
+                exit={exit}>
 
                 <PokemonSprite pokemon={pokemon} />
 

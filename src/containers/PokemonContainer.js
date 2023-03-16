@@ -13,6 +13,8 @@ function PokemonContainer() {
     const [maxPokemonOut, setMaxPokemonOut] = useState(0);
     const [viewPokedex, setViewPokedex] = useState(false);
     const [showCaughtCard, setShowCaughtCard] = useState(null);
+    const [pokeballPos, setPokeballPos] = useState(null);
+    const [caughtPokemonPos, setCaughtPokemonPos] = useState(null);
 
     useEffect(() => {
         getPokemon();
@@ -64,9 +66,22 @@ function PokemonContainer() {
         setPokemonList(pokemonList);
     }
 
+    function getRandomPokemon() {
+        const filtered = pokemonList.filter((p) => !pokemonCaught.includes(p.id)).map(p => p.id);
+        const chosen = filtered[Math.floor(Math.random() * filtered.length)]
+        return chosen;
+    }
 
+    function spawnPokemon() {
+        const rando = getRandomPokemon();
+        if (rando !== undefined) { setPokemonOut([...pokemonOut, rando]) }
+    }
 
-    function catchPokemon(pokemon) {
+    if (pokemonOut.length < maxPokemonOut) {
+        spawnPokemon();
+    }
+
+    function catchPokemon(pokemon, pokemonPos) {
         if (!pokemonCaught.includes(pokemon.id)) {
             const newCaughtList = [...pokemonCaught, pokemon.id];
             setPokemonCaught(newCaughtList);
@@ -77,6 +92,12 @@ function PokemonContainer() {
             setPokemonOut(newOutList);
         }
         setShowCaughtCard(pokemon);
+        setCaughtPokemonPos(pokemonPos);
+    }
+
+    function throwPokeball(point) {
+        setPokeballPos({ x: point.x, y: point.y })
+
     }
     const transition = {
         opacity: {
@@ -88,7 +109,7 @@ function PokemonContainer() {
         <div>
             <motion.h1 initial={{ opacity: 0 }} animate={{ opacity: [1, 1, 0], transitionEnd: { display: "none" } }} transition={transition} className='instructions'>Catch'em All!(Grab the Poke-Ball)</motion.h1>
             <button style={{ position: "fixed", top: "5px", right: "20px", zIndex: "10" }} onClick={() => setViewPokedex(!viewPokedex)}>{viewPokedex ? "Game" : "Pokedex"}</button>
-            {pokemonList && <PokemonGame pokemonList={pokemonList} pokemonOut={pokemonOut} setPokemonOut={setPokemonOut} pokemonCaught={pokemonCaught} catchPokemon={catchPokemon} maxPokemonOut={maxPokemonOut} />}
+            {pokemonList && <PokemonGame pokemonList={pokemonList} pokemonOut={pokemonOut} pokemonCaught={pokemonCaught} catchPokemon={catchPokemon} maxPokemonOut={maxPokemonOut} pokeballPos={pokeballPos} throwPokeball={throwPokeball} caughtPokemonPos={caughtPokemonPos} />}
             {viewPokedex && pokemonList && <Pokedex typeFilters={typeFilters} setTypeFilters={setTypeFilters} caughtFilters={caughtFilters} setCaughtFilters={setCaughtFilters} pokemonList={pokemonList} pokemonCaught={pokemonCaught} />}
             {showCaughtCard && <AnimatePresence>
                 <CardModal pokemon={showCaughtCard} caught={true} setShowCaughtCard={setShowCaughtCard} />

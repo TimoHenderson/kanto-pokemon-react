@@ -43,7 +43,6 @@ function PokemonStage({ pokemonList, pokemonOut, catchPokemon, pokeballPos }) {
             })
         }
         initStageSize();
-        console.log("initStageSize", dimensions)
     }, [])
 
 
