@@ -1,14 +1,9 @@
-import React, { useMemo, useEffect, useRef } from "react";
-
+import React, { useMemo, useRef, useEffect } from "react";
 import PokemonSprite from "./PokemonSprite";
-import { easeIn, motion } from "framer-motion"
+import { motion } from "framer-motion"
 import "./PokemonSprite.css"
 import { getRandomInt, getRandomArbitrary } from "../helpers/getRandomNumber"
 
-const pointInRect = ({ left, top, right, bottom }, { x, y }) => {
-
-    return (x > left && x < right) && (y > top && y < bottom)
-}
 
 function overlaps(a, b) {
     if (a.left >= b.right || b.left >= a.right) return false;
@@ -18,27 +13,29 @@ function overlaps(a, b) {
 
 function MovingPokemonSprite({ pokemon, catchPokemon, stage, pokeballRect }) {
     const sprite = useRef(null);
-    const exit = {
+    const exit = useMemo(() => {
+        return {
+            opacity: 0,
+            rotate: 1920,
+            scale: 0,
+            transition: {
+                rotate: {
+                    duration: 1.5
+                },
+                opacity: {
+                    ease: 'easeIn',
+                    duration: 1.5
+                },
+                scale: {
+                    duration: 1,
 
-        opacity: 0,
-        rotate: 1920,
-        scale: 0,
-        transition: {
-            rotate: {
-                duration: 1.5
-            },
-            opacity: {
-                ease: 'easeIn',
-                duration: 1.5
-            },
-            scale: {
-                duration: 1,
-
+                }
             }
         }
-    }
+    }, [])
+
+
     useEffect(() => {
-        console.log("pokeballRect", pokeballRect)
         function handleCatchPokemon(boundingRect) {
             const spriteCenter = {
                 x: boundingRect.left + (boundingRect.right - boundingRect.left) / 2,
@@ -48,16 +45,15 @@ function MovingPokemonSprite({ pokemon, catchPokemon, stage, pokeballRect }) {
             exit.y = boundingRect.top;
             catchPokemon(pokemon, spriteCenter);
         }
-        if (pokeballRect) {
-            console.log("spritePokeballRect", pokeballRect)
+        if (pokeballRect && sprite.current) {
             const boundingRect = sprite.current.getBoundingClientRect()
             if (overlaps(boundingRect, pokeballRect)) {
                 handleCatchPokemon(boundingRect);
                 console.log();
             }
         }
+    }, [pokeballRect, catchPokemon, exit, pokemon])
 
-    }, [pokeballRect]);
 
     const pokeMove = useMemo(() => {
         let stageWidth = stage.width;
@@ -148,7 +144,6 @@ function MovingPokemonSprite({ pokemon, catchPokemon, stage, pokeballRect }) {
             initial: initial,
             animate: animate,
             transition: transition,
-            exit: exit
         }
     }, [stage])
 

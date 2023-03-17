@@ -1,58 +1,63 @@
-import React, { useEffect, useMemo, useRef } from 'react';
-import { animate, motion, useAnimationControls } from 'framer-motion';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { motion } from 'framer-motion';
 import './Pokeball.css'
-function PokeBall({ releasePos, throwPokeball, caughtPokemonPos }) {
+function PokeBall({ throwPokeball, caughtPokemonPos, id, removePokeball }) {
 
+    const [thrown, setThrown] = useState(false);
+    const exit = useMemo(() => ({ rotate: 1080, transition: { power: 10, y: { duration: 0.5, ease: "easeIn" } } }), []);
+    const initialPosition = useMemo(() => { return {} }, [])
     const ballSprite = useRef(null);
 
-    const initialPosition = useMemo(() => {
-        if (ballSprite.current) {
-            const ballPos = ballSprite.current.getBoundingClientRect();
-            return {
-                x: ballPos.left + (ballPos.right - ballPos.left) / 2,
-                y: ballPos.top + (ballPos.bottom - ballPos.top) / 2
-            }
-        }
-    }, [ballSprite.current]);
+    // useEffect(() => {
+    //     if (ballSprite.current) {
+    //         const ballPos = ballSprite.current.getBoundingClientRect();
+    //         console.log("ballPos", ballPos)
+    //         initialPosition.x = ballPos.left + (ballPos.right - ballPos.left) / 2;
+    //         initialPosition.y = ballPos.top + (ballPos.bottom - ballPos.top) / 2;
+    //     }
+    // }, [initialPosition, ballSprite]);
 
-    const calcAnim = useMemo(() => {
-        const animate = { transition: { y: { duration: 0.5, ease: "easeIn" } } };
-        const initial = {};
-        if (caughtPokemonPos) {
-            animate.x = caughtPokemonPos.x - initialPosition.x;
+    function setStartPoint(event, info) {
+        const ballRect = event.target.getBoundingClientRect();
+        initialPosition.x = ballRect.left + (ballRect.right - ballRect.left) / 2;
+        initialPosition.y = ballRect.top + (ballRect.bottom - ballRect.top) / 2;
+    }
+
+    useEffect(() => {
+        function handleRemovePokeball() {
+            exit.x = caughtPokemonPos.x - initialPosition.x;
             const y = caughtPokemonPos.y - initialPosition.y;
-            animate.y = [y, y - 50, y];
-            console.log("animate", animate)
-        } else {
-            animate.x = 0;
-            animate.y = 0;
-            // initial = { x: 0, y: 0 }
+            exit.y = [y, y - 50, y];
+            removePokeball(id)
         }
-        return { animate: animate }
-    }, [caughtPokemonPos, initialPosition])
-    // if (releasePos) console.log("Ballsprite", ballSprite.current.)
+        if (thrown && caughtPokemonPos) {
+            handleRemovePokeball()
+        }
+    }, [thrown, caughtPokemonPos, exit, removePokeball, id, initialPosition])
 
     function handleThrow(event) {
         console.log("handleThrow")
         const ballRect = event.target.getBoundingClientRect();
         throwPokeball(ballRect);
+        setThrown(true);
     }
 
     return (
         <motion.img
-            // style={{ position: "fixed" }}
             ref={ballSprite}
             drag
-            animate={calcAnim.animate}
+            dragSnapToOrigin
+            exit={exit}
             dragTransition={{
                 power: 0.2,
                 min: 20,
                 max: 50,
                 bounceStiffness: 100
             }}
-            // animate={controls}
+            onDragStart={(event, info) => setStartPoint(event, info)}
             onDragEnd={(event) => handleThrow(event)}
             src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="" />
     )
 }
+
 export default PokeBall;
