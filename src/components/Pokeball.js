@@ -4,18 +4,10 @@ import './Pokeball.css'
 function PokeBall({ throwPokeball, caughtPokemonPos, id, removePokeball }) {
 
     const [thrown, setThrown] = useState(false);
-    const exit = useMemo(() => ({ rotate: 1080, transition: { power: 10, y: { duration: 0.5, ease: "easeIn" } } }), []);
+    const exit = useMemo(() => ({ scale: 0.8, rotate: 1080, transition: { power: 10, y: { duration: 0.5, ease: "easeIn" }, scale: { duration: 0.5, ease: "easeIn" } } }), []);
     const initialPosition = useMemo(() => { return {} }, [])
     const ballSprite = useRef(null);
 
-    // useEffect(() => {
-    //     if (ballSprite.current) {
-    //         const ballPos = ballSprite.current.getBoundingClientRect();
-    //         console.log("ballPos", ballPos)
-    //         initialPosition.x = ballPos.left + (ballPos.right - ballPos.left) / 2;
-    //         initialPosition.y = ballPos.top + (ballPos.bottom - ballPos.top) / 2;
-    //     }
-    // }, [initialPosition, ballSprite]);
 
     function setStartPoint(event, info) {
         const ballRect = event.target.getBoundingClientRect();
@@ -48,6 +40,7 @@ function PokeBall({ throwPokeball, caughtPokemonPos, id, removePokeball }) {
             drag
             dragSnapToOrigin
             exit={exit}
+            whileDrag={{ scale: 1.5 }}
             dragTransition={{
                 power: 0.2,
                 min: 20,

@@ -25,6 +25,11 @@ function PokemonGame({ pokemonList, pokemonCaught, setPokemonCaught }) {
         staggerPokemon();
     }, [pokemonOut, maxPokemonOut])
 
+    useEffect(() => {
+        if (pokeballRect && !caughtPokemonPos) {
+            setPokeballRect(null);
+        }
+    }, [pokeballRect, caughtPokemonPos])
     function getRandomPokemon() {
         const filtered = pokemonList.filter((p) => !pokemonCaught.includes(p.id)).map(p => p.id);
         const chosen = filtered[Math.floor(Math.random() * filtered.length)]
@@ -56,7 +61,7 @@ function PokemonGame({ pokemonList, pokemonCaught, setPokemonCaught }) {
         setPokeballIds(newPokeballIds);
         setCaughtPokemonPos(null);
     }
-    function throwPokeball(rect, id) {
+    function throwPokeball(rect) {
         console.log("throwPokeball")
         setPokeballRect(rect);
     }
