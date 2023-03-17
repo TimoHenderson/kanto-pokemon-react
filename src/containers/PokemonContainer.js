@@ -13,7 +13,7 @@ function PokemonContainer() {
     const [maxPokemonOut, setMaxPokemonOut] = useState(0);
     const [viewPokedex, setViewPokedex] = useState(false);
     const [showCaughtCard, setShowCaughtCard] = useState(null);
-    const [pokeballPos, setPokeballPos] = useState(null);
+    const [pokeballRect, setPokeballRect] = useState(null);
     const [caughtPokemonPos, setCaughtPokemonPos] = useState(null);
 
     useEffect(() => {
@@ -95,10 +95,11 @@ function PokemonContainer() {
         setCaughtPokemonPos(pokemonPos);
     }
 
-    function throwPokeball(point) {
-        setPokeballPos({ x: point.x, y: point.y })
-
+    function throwPokeball(rect) {
+        console.log("throwPokeball")
+        setPokeballRect(rect);
     }
+
     const transition = {
         opacity: {
             duration: 10
@@ -109,7 +110,7 @@ function PokemonContainer() {
         <div>
             <motion.h1 initial={{ opacity: 0 }} animate={{ opacity: [1, 1, 0], transitionEnd: { display: "none" } }} transition={transition} className='instructions'>Catch'em All!(Grab the Poke-Ball)</motion.h1>
             <button style={{ position: "fixed", top: "5px", right: "20px", zIndex: "10" }} onClick={() => setViewPokedex(!viewPokedex)}>{viewPokedex ? "Game" : "Pokedex"}</button>
-            {pokemonList && <PokemonGame pokemonList={pokemonList} pokemonOut={pokemonOut} pokemonCaught={pokemonCaught} catchPokemon={catchPokemon} maxPokemonOut={maxPokemonOut} pokeballPos={pokeballPos} throwPokeball={throwPokeball} caughtPokemonPos={caughtPokemonPos} />}
+            {pokemonList && <PokemonGame pokemonList={pokemonList} pokemonOut={pokemonOut} pokemonCaught={pokemonCaught} catchPokemon={catchPokemon} maxPokemonOut={maxPokemonOut} pokeballRect={pokeballRect} throwPokeball={throwPokeball} caughtPokemonPos={caughtPokemonPos} />}
             {viewPokedex && pokemonList && <Pokedex typeFilters={typeFilters} setTypeFilters={setTypeFilters} caughtFilters={caughtFilters} setCaughtFilters={setCaughtFilters} pokemonList={pokemonList} pokemonCaught={pokemonCaught} />}
             {showCaughtCard && <AnimatePresence>
                 <CardModal pokemon={showCaughtCard} caught={true} setShowCaughtCard={setShowCaughtCard} />

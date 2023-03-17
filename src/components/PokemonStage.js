@@ -14,7 +14,7 @@ function debounce(fn, ms) {
     };
 }
 
-function PokemonStage({ pokemonList, pokemonOut, catchPokemon, pokeballPos }) {
+function PokemonStage({ pokemonList, pokemonOut, catchPokemon, pokeballRect }) {
     const pokemonStage = useRef(null);
     const [dimensions, setDimensions] = useState({});
 
@@ -53,7 +53,7 @@ function PokemonStage({ pokemonList, pokemonOut, catchPokemon, pokeballPos }) {
             pokemon={pokemon}
             catchPokemon={catchPokemon}
             stage={dimensions}
-            pokeballPos={pokeballPos}
+            pokeballRect={pokeballRect}
         />
     })
 

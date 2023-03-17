@@ -10,7 +10,13 @@ const pointInRect = ({ left, top, right, bottom }, { x, y }) => {
     return (x > left && x < right) && (y > top && y < bottom)
 }
 
-function MovingPokemonSprite({ pokemon, catchPokemon, stage, pokeballPos }) {
+function overlaps(a, b) {
+    if (a.left >= b.right || b.left >= a.right) return false;
+    if (a.top >= b.bottom || b.top >= a.bottom) return false;
+    return true;
+}
+
+function MovingPokemonSprite({ pokemon, catchPokemon, stage, pokeballRect }) {
     const sprite = useRef(null);
     const exit = {
 
@@ -32,7 +38,7 @@ function MovingPokemonSprite({ pokemon, catchPokemon, stage, pokeballPos }) {
         }
     }
     useEffect(() => {
-
+        console.log("pokeballRect", pokeballRect)
         function handleCatchPokemon(boundingRect) {
             const spriteCenter = {
                 x: boundingRect.left + (boundingRect.right - boundingRect.left) / 2,
@@ -42,15 +48,16 @@ function MovingPokemonSprite({ pokemon, catchPokemon, stage, pokeballPos }) {
             exit.y = boundingRect.top;
             catchPokemon(pokemon, spriteCenter);
         }
-        if (pokeballPos) {
+        if (pokeballRect) {
+            console.log("spritePokeballRect", pokeballRect)
             const boundingRect = sprite.current.getBoundingClientRect()
-            if (pointInRect(boundingRect, pokeballPos)) {
+            if (overlaps(boundingRect, pokeballRect)) {
                 handleCatchPokemon(boundingRect);
                 console.log();
             }
         }
 
-    }, [pokeballPos]);
+    }, [pokeballRect]);
 
     const pokeMove = useMemo(() => {
         let stageWidth = stage.width;

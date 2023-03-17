@@ -2,15 +2,9 @@ import React, { useEffect, useMemo, useRef } from 'react';
 import { animate, motion, useAnimationControls } from 'framer-motion';
 import './Pokeball.css'
 function PokeBall({ releasePos, throwPokeball, caughtPokemonPos }) {
-    // const [animate, setAnimate] = useState({})
+
     const ballSprite = useRef(null);
-    // const controls = useAnimationControls()
-    // useEffect(() => {
-    //     if (releasePos) {
-    //         animate.x = releasePos.x
-    //         console.log(ballSprite.current)
-    //     }
-    // }, [releasePos])
+
     const initialPosition = useMemo(() => {
         if (ballSprite.current) {
             const ballPos = ballSprite.current.getBoundingClientRect();
@@ -20,19 +14,14 @@ function PokeBall({ releasePos, throwPokeball, caughtPokemonPos }) {
             }
         }
     }, [ballSprite.current]);
+
     const calcAnim = useMemo(() => {
-        const animate = {};
+        const animate = { transition: { y: { duration: 0.5, ease: "easeIn" } } };
         const initial = {};
         if (caughtPokemonPos) {
-            const ballPos = ballSprite.current.getBoundingClientRect();
-            const { left, top, right, bottom } = ballPos;
-            console.log(left, top, releasePos)
-            console.log("initialPos", initialPosition)
-            initial.x = releasePos.x - left;
-            initial.y = top - releasePos.y;
             animate.x = caughtPokemonPos.x - initialPosition.x;
             const y = caughtPokemonPos.y - initialPosition.y;
-            animate.y = [y, y - 40, y];
+            animate.y = [y, y - 50, y];
             console.log("animate", animate)
         } else {
             animate.x = 0;
@@ -43,29 +32,26 @@ function PokeBall({ releasePos, throwPokeball, caughtPokemonPos }) {
     }, [caughtPokemonPos, initialPosition])
     // if (releasePos) console.log("Ballsprite", ballSprite.current.)
 
-    function handleThrow(point) {
-        throwPokeball(point);
-
+    function handleThrow(event) {
+        console.log("handleThrow")
+        const ballRect = event.target.getBoundingClientRect();
+        throwPokeball(ballRect);
     }
-
 
     return (
         <motion.img
             // style={{ position: "fixed" }}
             ref={ballSprite}
             drag
-
             animate={calcAnim.animate}
-
             dragTransition={{
                 power: 0.2,
-
                 min: 20,
                 max: 50,
                 bounceStiffness: 100
             }}
             // animate={controls}
-            onDragEnd={(event, info) => handleThrow(info.point)}
+            onDragEnd={(event) => handleThrow(event)}
             src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="" />
     )
 }
