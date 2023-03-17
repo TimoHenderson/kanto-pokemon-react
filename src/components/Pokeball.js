@@ -37,6 +37,7 @@ function PokeBall({ throwPokeball, caughtPokemonPos, id, removePokeball }) {
     return (
         <motion.img
             ref={ballSprite}
+            style={{ touchAction: "none" }}
             drag
             dragSnapToOrigin
             exit={exit}

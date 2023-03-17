@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { AnimatePresence } from "framer-motion";
+
 import PokemonStage from "./PokemonStage";
 import CaughtPokemon from "./CaughtPokemon";
 import CardModal from "./CardModal";
@@ -69,6 +69,9 @@ function PokemonGame({ pokemonList, pokemonCaught, setPokemonCaught }) {
     function spawnPokeball() {
         setPokeballIds([...pokeballIds, crypto.randomUUID()])
     }
+    function hideCaughtCard() {
+        setShowCaughtCard(null);
+    }
 
 
     if (pokemonList && maxPokemonOut === 0) setMaxPokemonOut(1);
@@ -80,9 +83,7 @@ function PokemonGame({ pokemonList, pokemonCaught, setPokemonCaught }) {
             <PokeBalls pokeballIds={pokeballIds} throwPokeball={throwPokeball} caughtPokemonPos={caughtPokemonPos} removePokeball={removePokeball} />
             <button onClick={spawnPokeball}>pokeball</button>
             <CaughtPokemon pokemonList={pokemonList} pokemonCaught={pokemonCaught} />
-            {showCaughtCard && <AnimatePresence>
-                <CardModal pokemon={showCaughtCard} caught={true} setShowCaughtCard={setShowCaughtCard} />
-            </AnimatePresence>}
+            {showCaughtCard && <CardModal pokemon={showCaughtCard} caught={true} hideCaughtCard={hideCaughtCard} />}
         </div>
     )
 }
