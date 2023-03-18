@@ -23,7 +23,7 @@ function MathsGame({ spawnPokeball, pokeballIds, setShowMathsGame }) {
             input.current.focus()
         } else {
             setAnswer("");
-            setMessage("Oops, Try again. You can do it!\n");
+            setMessage("Oops, Try again. You can do it!");
             input.current.focus()
         }
     }
