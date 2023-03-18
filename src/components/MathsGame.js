@@ -23,23 +23,28 @@ function MathsGame({ spawnPokeball, pokeballIds, setShowMathsGame }) {
             input.current.focus()
         } else {
             setAnswer("");
-            setMessage("Oops, Try again. You can do it!");
+            setMessage("Oops, Try again. You can do it!\n");
             input.current.focus()
         }
     }
 
-    return (
+    return (<>
         <Modal>
-            <div style={{ backgroundColor: "bisque", padding: "2rem", width: "15rem", borderRadius: "1rem", height: "12rem" }}>
+            <div style={{ backgroundColor: "bisque", padding: "1rem 2rem 2rem 2rem", width: "15rem", borderRadius: "1rem", height: "16rem" }}>
+                <img style={{ width: "40%" }} src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/765.png" alt="Oranguru" />
                 <p>{message}</p>
-                <p> {num1} x {num2} =</p>
+
                 <form onSubmit={(event) => handleForm(event)}>
-                    <input ref={input} onChange={e => setAnswer(e.target.value)} type="number" placeholder="answer" value={answer} autoFocus />
+                    <p style={{ display: "inline" }}> {num1} x {num2} = </p>
+                    <input ref={input} style={{ width: "3rem" }} onChange={e => setAnswer(e.target.value)} type="number" placeholder="answer" value={answer} autoFocus />
+                    <br />
+                    <br />
                     <input type="submit" value="submit" />
                 </form>
-                <span><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="Pokeball" />x{pokeballIds.length}</span>
+                <span style={{ display: "flex", justifyContent: "center", alignItems: "center" }}><img style={{ width: "30px", height: "30px" }} src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="Pokeball" /><p style={{ display: "inline" }}>x{pokeballIds.length}</p></span>
+
             </div>
-        </Modal>);
+        </Modal></>);
 }
 
 export default MathsGame;
