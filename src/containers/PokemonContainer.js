@@ -37,6 +37,7 @@ function PokemonContainer() {
                 return pokeData;
             })
             const pokemonList = await Promise.all(pokemonPromises);
+            pokemonList.sort((a, b) => a.id - b.id)
             return pokemonList;
         }
         const genData = await getGenData();
@@ -46,7 +47,7 @@ function PokemonContainer() {
 
     const transition = {
         opacity: {
-            duration: 10
+            duration: 5
         }
     }
 

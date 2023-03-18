@@ -6,6 +6,7 @@ import { getRandomInt, getRandomArbitrary } from "../helpers/getRandomNumber"
 
 
 function overlaps(a, b) {
+    if (b.x === 0 || b.y === 0) return false;
     if (a.left >= b.right || b.left >= a.right) return false;
     if (a.top >= b.bottom || b.top >= a.bottom) return false;
     return true;

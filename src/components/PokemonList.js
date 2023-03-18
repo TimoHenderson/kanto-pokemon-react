@@ -1,8 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import PokemonCard from "./PokemonCard";
+import CardModal from "./CardModal";
 import './PokemonList.css'
 
 function PokemonList({ pokemonList, pokemonCaught, typeFilters, caughtFilters }) {
+    const [showPokemonDetails, setShowPokemonDetails] = useState(null);
+    function showPokemon(pokemon) {
+        setShowPokemonDetails(pokemon);
+    }
+    function hidePokemon() {
+        setShowPokemonDetails(null);
+    }
     const filteredPokemonList = pokemonList.filter((pokemon) => {
         let typeValid = false;
         let caughtValid = false;
@@ -16,11 +24,11 @@ function PokemonList({ pokemonList, pokemonCaught, typeFilters, caughtFilters })
         return typeValid && caughtValid
     })
     const pokemonNodes = filteredPokemonList.map((pokemon) => {
-        return <PokemonCard key={pokemon.id} caught={pokemonCaught.includes(pokemon.id)} pokemon={pokemon} />
+        return <PokemonCard key={pokemon.id} caught={pokemonCaught.includes(pokemon.id)} pokemon={pokemon} small={true} showDetails={showPokemon} />
     })
     return (
         <div className="pokemonListContainer">
-
+            {showPokemonDetails && <CardModal pokemon={showPokemonDetails} caught={pokemonCaught.includes(showPokemonDetails.id)} hideCaughtCard={hidePokemon} quick={true} />}
             <main>{pokemonNodes}</main>
         </div>
     );

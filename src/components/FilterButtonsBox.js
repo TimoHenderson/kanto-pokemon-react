@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
+
 import FilterButtons from "./FilterButtons";
 
-function FilterButtonsBox({ typeFilters, caughtFilters, setCaughtFilters, setTypeFilters }) {
 
+function FilterButtonsBox({ typeFilters, caughtFilters, setCaughtFilters, setTypeFilters }) {
+    const [showFilters, setShowFilters] = useState(false);
     function setAllTypeFilters(value) {
         setAllFilters(typeFilters, setTypeFilters, value);
     }
@@ -32,15 +34,20 @@ function FilterButtonsBox({ typeFilters, caughtFilters, setCaughtFilters, setTyp
     return (
         <div className="filterButtonsBox">
             <h1>Pokedex</h1>
-            <FilterButtons filters={typeFilters} toggleFilter={toggleTypeFilter} />
-            <FilterButtons filters={caughtFilters} toggleFilter={toggleCaughtFilter} />
-            <div className="filterButtons">
-                <button onClick={() => setAllTypeFilters(false)}>No Types</button>
-                <button onClick={() => setAllTypeFilters(true)} >All Types</button>
-                <button onClick={() => setAllCaughtFilters(true)}>Caught and Uncaught</button>
-                <button onClick={() => setAllCaughtFilters(false)}>Caught and Uncaught Off</button>
+            <div style={{ paddingBottom: "1rem" }}>
+                <button onClick={() => setShowFilters(!showFilters)}>{showFilters ? "Hide Filters" : "ShowFilters"}</button>
             </div>
-        </div>
+            {showFilters && <div >
+                <FilterButtons filters={typeFilters} toggleFilter={toggleTypeFilter} />
+                <FilterButtons filters={caughtFilters} toggleFilter={toggleCaughtFilter} />
+                <div className="filterButtons">
+                    <button onClick={() => setAllTypeFilters(false)}>No Types</button>
+                    <button onClick={() => setAllTypeFilters(true)} >All Types</button>
+                    <button onClick={() => setAllCaughtFilters(true)}>Caught and Uncaught</button>
+                    <button onClick={() => setAllCaughtFilters(false)}>Caught and Uncaught Off</button>
+                </div>
+            </div>}
+        </div >
     )
 }
 export default FilterButtonsBox;

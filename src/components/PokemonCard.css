@@ -5,6 +5,10 @@
     padding: 1rem;
 }
 
+.pokemonCard.small {
+    width: 8rem;
+}
+
 .pokemonCard>img.notCaught {
     opacity: 40%;
 }
@@ -13,11 +17,12 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 100dvw;
-    height: 100dvh;
+    width: 100vw;
+    height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
+    padding-top: 4rem;
     background-color: rgba(0, 0, 0, 0.533);
-    z-index: 5;
+    z-index: 20;
 }

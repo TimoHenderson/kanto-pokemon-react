@@ -4,6 +4,7 @@ import PokemonStage from "./PokemonStage";
 import CaughtPokemon from "./CaughtPokemon";
 import CardModal from "./CardModal";
 import PokeBalls from "./Pokeballs";
+import MathsGame from "./MathsGame";
 
 
 
@@ -11,6 +12,7 @@ function PokemonGame({ pokemonList, pokemonCaught, setPokemonCaught }) {
     const [maxPokemonOut, setMaxPokemonOut] = useState(0);
     const [pokemonOut, setPokemonOut] = useState([]);
     const [showCaughtCard, setShowCaughtCard] = useState(null);
+    const [showMathsGame, setShowMathsGame] = useState(false);
     const [pokeballRect, setPokeballRect] = useState(null);
     const [caughtPokemonPos, setCaughtPokemonPos] = useState(null);
     const [pokeballIds, setPokeballIds] = useState([1, 2])
@@ -67,23 +69,24 @@ function PokemonGame({ pokemonList, pokemonCaught, setPokemonCaught }) {
     }
 
     function spawnPokeball() {
-        setPokeballIds([...pokeballIds, crypto.randomUUID()])
+        setPokeballIds([...pokeballIds, Date.now()])
     }
     function hideCaughtCard() {
         setShowCaughtCard(null);
     }
 
-
+    if (pokeballIds.length === 0 && !showMathsGame && !showCaughtCard) setShowMathsGame(true);
+    if (showMathsGame && pokeballIds.length === 5) setShowMathsGame(false);
     if (pokemonList && maxPokemonOut === 0) setMaxPokemonOut(1);
     if (pokemonOut.length < maxPokemonOut) spawnPokemon();
 
     return (
         <div>
             <PokemonStage catchPokemon={catchPokemon} pokemonList={pokemonList} pokemonOut={pokemonOut} pokeballRect={pokeballRect} />
-            <PokeBalls pokeballIds={pokeballIds} throwPokeball={throwPokeball} caughtPokemonPos={caughtPokemonPos} removePokeball={removePokeball} />
-            <button onClick={spawnPokeball}>pokeball</button>
+            <PokeBalls pokeballIds={pokeballIds} throwPokeball={throwPokeball} caughtPokemonPos={caughtPokemonPos} removePokeball={removePokeball} spawnPokeball={spawnPokeball} />
             <CaughtPokemon pokemonList={pokemonList} pokemonCaught={pokemonCaught} />
             {showCaughtCard && <CardModal pokemon={showCaughtCard} caught={true} hideCaughtCard={hideCaughtCard} />}
+            {showMathsGame && <MathsGame spawnPokeball={spawnPokeball} pokeballIds={pokeballIds} setShowMathsGame={setShowMathsGame} />}
         </div>
     )
 }
