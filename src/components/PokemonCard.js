@@ -12,7 +12,7 @@ function PokemonCard({ pokemon, caught, small, showDetails }) {
     return (
         <div onClick={handleClick} className={small ? "pokemonCard small" : "pokemonCard"}>
             <h3>{pokemon.id}</h3>
-            <h3>{pokemon.name}</h3>
+            <h3>{pokemon.name[0].toUpperCase() + pokemon.name.substring(1)}</h3>
             <img className={caught ? "caught" : "notCaught"} src={pokemon.sprites.front_default} alt="" />
             {!small && <p>{pokemon.flavor_text}</p>}
         </div>
